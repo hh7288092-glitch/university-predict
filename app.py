@@ -1,16 +1,16 @@
 from flask import Flask, request, render_template_string
-import numpy as np
+import os
 
 app = Flask(__name__)
 
-# كود HTML المطور باللون الأزرق الأكاديمي مع أيقونات الاقتصاد والإحصاء
+# كود الواجهة الأكاديمية الزرقاء المنسقة بأيقونات الاقتصاد والإحصاء
 html_layout = """
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام التحليل والتنبؤ بالتخصص الجامعي</title>
+    <title>منصة اختر تخصصك الجامعي بذكاء</title>
     <style>
         :root {
             --primary-blue: #1e3799;
@@ -182,7 +182,7 @@ html_layout = """
 <body>
     <div class="main-wrapper">
         <div class="welcome-card">
-            <h2>مرحباً بك في منصتك الأكاديمية! 🎓📈</h2>
+            <h2>مرحباً بك في منصة اختر تخصصك الجامعي بذكاء! 🎓📈</h2>
             <div class="welcome-msg">
                 يسعدنا مساعدتك في تحديد مستقبلك الأكاديمي. الرجاء إدخال البيانات الإحصائية والدرجات بدقة داخل الإطار أدناه، وسيقوم النموذج التحليلي بالتنبؤ بالتخصص الأنسب لملفك الدراسي.
             </div>
@@ -252,7 +252,6 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    # جلب المدخلات
     moyenne = float(request.form["moyenne"])
     compta = float(request.form["compta"])
     eco = float(request.form["eco"])
@@ -261,21 +260,18 @@ def predict():
     analyse = float(request.form["analyse"])
     calcul = float(request.form["calcul"])
     
-    # 🧠 الذكاء الاصطناعي البديل (معادلة ذكية مدمجة مبنية على تجاربنا السابقة مئة بالمئة)
     if compta >= 15 or calcul == 1:
-        raw_val = "1" # علوم التسيير / محاسبة
+        raw_val = "1"
     elif eco >= 14 or analyse == 1:
-        raw_val = "0" # علوم اقتصادية
+        raw_val = "0"
     elif moyenne >= 13 and organis == 1:
-        raw_val = "3" # علوم تجارية
+        raw_val = "3"
     else:
-        raw_val = "2" # علوم مالية ومحاسبة
+        raw_val = "2"
     
     result_text = "📈 التخصص المقترح إحصائياً يحمل الرمز: " + raw_val
     return render_template_string(html_layout, prediction_text=result_text)
 
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
